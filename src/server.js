@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import socketIO from "socket.io";
 import socketController from "./socket.io/socketConroller";
 
+const Sequelize = require("sequelize");
+
 require("dotenv").config();
 
 const app = express();
