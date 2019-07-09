@@ -5,8 +5,9 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import socketIO from "socket.io";
 import socketController from "./socket.io/socketConroller";
+import { sequelize } from "../models";
 
-const Sequelize = require("sequelize");
+// const Sequelize = require("sequelize");
 
 require("dotenv").config();
 
@@ -26,3 +27,5 @@ const server = app.listen(PORT, () => {
 const io = socketIO.listen(server);
 
 io.on("connection", socket => socketController(socket));
+
+sequelize.sync();
