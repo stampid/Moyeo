@@ -1,5 +1,7 @@
 // user
 const USERS = "/users";
+const SIGNUP = "/signup";
+const LOGIN = "/login";
 
 // room
 const ROOMS = "/rooms";
@@ -13,6 +15,8 @@ const SCHEDULES = "/schedules";
 
 const ruoutes = {
   users: USERS,
+  signup: SIGNUP,
+  login: LOGIN,
   rooms: ROOMS,
   schedules: SCHEDULES
 };

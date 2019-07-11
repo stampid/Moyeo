@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
     "users",
@@ -7,12 +9,24 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true
       },
+      password: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+      },
       nickname: {
         type: DataTypes.STRING(20),
         allowNull: false
       },
       region: {
         type: DataTypes.STRING(50),
+        allowNull: false
+      },
+      age: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      gender: {
+        type: DataTypes.STRING(20),
         allowNull: false
       }
     },

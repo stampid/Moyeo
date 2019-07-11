@@ -34,4 +34,4 @@ const io = socketIO.listen(server);
 
 io.on("connection", socket => socketController(socket));
 
-sequelize.sync();
+// sequelize.sync();

@@ -20,11 +20,15 @@ export const createJWT = email => {
   });
 };
 
-export const verifyJWT = cookie => {
+export const verifyJWT = token => {
+  console.log("========aefagaef");
   return new Promise((resolve, reject) => {
-    jwt.verify(cookie.user, process.env.JWTSECRET, (err, decode) => {
-      if (err) reject(err);
-      resolve(decode);
+    jwt.verify(token, process.env.JWTSECRET, (err, decode) => {
+      if (decode) {
+        resolve(decode);
+      } else {
+        reject();
+      }
     });
   });
 };
