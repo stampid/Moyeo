@@ -45,19 +45,20 @@ export const login = (req, res) => {
   users
     .findOne({ where: { email, password } })
     .then(async data => {
-      const token = await createJWT(data.email);
-      try {
-        result.isLogin = true;
-        result.token = token;
-        result.data = data;
-        res.status(200);
-        res.send(result);
-      } catch (err) {
-        result.isLogin = false;
-        result.error = err;
-        res.status(404);
-        res.send(result);
-      }
+      await createJWT(data.email)
+        .then(token => {
+          result.isLogin = true;
+          result.token = token;
+          result.data = data;
+          res.status(200);
+          res.send(result);
+        })
+        .catch(err => {
+          result.isLogin = false;
+          result.error = err;
+          res.status(404);
+          res.send(result);
+        });
     })
     .catch(err => {
       result.isLogin = false;

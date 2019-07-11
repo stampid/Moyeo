@@ -7,28 +7,9 @@ const router = express.Router();
 router.post(routes.login, login);
 router.post(routes.signup, signup);
 
-router.use("/", async (req, res, next) => {
-  console.log(req.headers["x-access-token"]);
-  const result = {
-    isLogin: null
-  };
-  const decoded = await verifyJWT(req.headers["x-access-token"]);
-  try {
-    if (decoded) {
-      next();
-    } else {
-      result.isLogin = false;
-      res.status(404);
-      res.send(result);
-    }
-  } catch (err) {
-    result.isLogin = false;
-    res.status(404);
-    res.send(result);
-  }
-});
+router.use("/", verifyJWT);
 
-router.post("/test", (req, res, next) => {
+router.post("/test", (req, res) => {
   res.send("doit!");
 });
 

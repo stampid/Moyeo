@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
 
 export const createJWT = email => {
   return new Promise((resolve, reject) => {
@@ -10,7 +11,7 @@ export const createJWT = email => {
       },
       process.env.JWTSECRET,
       {
-        expiresIn: "1h"
+        expiresIn: "1m"
       },
       (err, token) => {
         if (err) reject(err);
@@ -20,18 +21,33 @@ export const createJWT = email => {
   });
 };
 
-export const verifyJWT = token => {
-  console.log("========aefagaef");
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWTSECRET, (err, decode) => {
-      if (decode) {
-        resolve(decode);
-      } else {
-        reject();
-      }
-    });
+export const verifyJWT = (req, res, next) => {
+  const token = req.headers["x-access-token"] || req.query.token;
+  const result = { isLogin: null };
+
+  jwt.verify(token, process.env.JWTSECRET, (err, decode) => {
+    if (err) {
+      console.log("************", err);
+      result.isLogin = false;
+      res.status(404);
+      res.send(result);
+    } else {
+      next();
+    }
   });
 };
+
+// export const verifyJWT = token => {
+//   return new Promise((resolve, reject) => {
+//     jwt.verify(token, process.env.JWTSECRET, (err, decode) => {
+//       if (err) {
+//         reject(err);
+//         return;
+//       }
+//       resolve(decode);
+//     });
+//   });
+// };
 
 // jwt 생성은 됨
 // refresh 기능은 아직 만들지 못함
