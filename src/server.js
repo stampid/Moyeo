@@ -1,4 +1,5 @@
 import express from "express";
+// import http from "http";
 import logger from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -15,6 +16,8 @@ require("dotenv").config();
 
 const app = express();
 const { PORT } = process.env;
+// const server = http.createServer(app);
+// server.listen(PORT);
 
 app.use(logger("dev"));
 app.use(cors());
@@ -30,8 +33,14 @@ const server = app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
 });
 
+// app.get('/', function(req, res) {
+//   res.sendFile(__dirname + '/client.html');
+// });
+
 const io = socketIO.listen(server);
 
 io.on("connection", socket => socketController(socket));
 
-sequelize.sync();
+// sequelize.sync();
+
+module.exports = app;
