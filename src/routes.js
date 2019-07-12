@@ -2,6 +2,7 @@
 const USERS = "/users";
 const SIGNUP = "/signup";
 const LOGIN = "/login";
+const LOGOUT = "/logout";
 
 // room
 const ROOMS = "/rooms";
@@ -13,12 +14,13 @@ const SCHEDULES = "/schedules";
 
 // github
 
-const ruoutes = {
+const routes = {
   users: USERS,
   signup: SIGNUP,
   login: LOGIN,
+  logout: LOGOUT,
   rooms: ROOMS,
   schedules: SCHEDULES
 };
 
-export default ruoutes;
+export default routes;

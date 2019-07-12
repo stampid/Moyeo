@@ -1,16 +1,14 @@
 import express from "express";
 import routes from "../routes";
-import { signup, login } from "../controllers/userController";
+import { signup, login, logout } from "../controllers/userController";
 import { verifyJWT } from "../middleware/JWThelper";
 
 const router = express.Router();
-router.post(routes.login, login);
-router.post(routes.signup, signup);
+router.post(routes.login, login); // 로그인
+router.post(routes.signup, signup); // 회원가입
 
-router.use("/", verifyJWT);
+router.use("/", verifyJWT); // 토큰 검증 미들웨어
 
-router.post("/test", (req, res) => {
-  res.send("doit!");
-});
+router.post(routes.logout, logout); // 로그아웃
 
 export default router;

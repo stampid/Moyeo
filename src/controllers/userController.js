@@ -2,6 +2,7 @@ import { users } from "../../models/index";
 import hash from "../middleware/crypto";
 import { createJWT } from "../middleware/JWThelper";
 
+// 회원가입 함수
 export const signup = (req, res) => {
   const { email, nickname, region, age, gender } = req.body;
   const result = {
@@ -32,6 +33,7 @@ export const signup = (req, res) => {
     });
 };
 
+// 로그인 함수
 export const login = (req, res) => {
   const { email } = req.body;
   const result = {
@@ -43,22 +45,23 @@ export const login = (req, res) => {
 
   password = hash(password);
   users
-    .findOne({ where: { email, password } })
+    .findOne({
+      where: { email, password },
+      attributes: ["id", "email", "nickname", "region", "age", "gender"]
+    })
     .then(async data => {
-      await createJWT(data.email)
-        .then(token => {
-          result.isLogin = true;
-          result.token = token;
-          result.data = data;
-          res.status(200);
-          res.send(result);
-        })
-        .catch(err => {
-          result.isLogin = false;
-          result.error = err;
-          res.status(404);
-          res.send(result);
-        });
+      const token = createJWT(data.email);
+      if (token) {
+        result.isLogin = true;
+        result.token = token;
+        result.data = data;
+        res.status(200);
+        res.send(result);
+      } else {
+        result.isLogin = false;
+        res.status(404);
+        res.send(result);
+      }
     })
     .catch(err => {
       result.isLogin = false;
@@ -67,4 +70,13 @@ export const login = (req, res) => {
       res.send(result);
     });
   //   res.send("hello");
+};
+
+// 로그아웃 함수
+export const logout = (req, res) => {
+  const result = {
+    isLogin: false
+  };
+  res.status(200);
+  res.send(result);
 };
