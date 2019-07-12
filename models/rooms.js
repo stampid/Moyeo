@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(100),
         allowNull: false
       },
+      roomSize: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       region: {
         type: DataTypes.STRING(50),
         allowNull: false

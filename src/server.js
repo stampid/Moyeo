@@ -8,6 +8,7 @@ import socketController from "./socket.io/socketConroller";
 import { sequelize } from "../models";
 import routes from "./routes"; // 분기를 위한 url 모음 파일
 import userRouter from "./routers/userRouter"; // userRouter 파일
+import roomRouter from "./routers/roomRouter"; // roomRouter 파일
 
 // const Sequelize = require("sequelize");
 
@@ -23,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(routes.users, userRouter);
-// app.use(routes.rooms);
+app.use(routes.rooms, roomRouter);
 // app.use(routes.schedules);
 
 const server = app.listen(PORT, () => {
