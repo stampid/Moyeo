@@ -11,12 +11,12 @@ const socketController = socket => {
   socket.on("ServerEntryRoom", ({ data }) => {
     const { roomId, userId, nickname } = data;
 
-    socket.join(data.roomId);
-    socket.in(data.roomId).emit("ClientEntryRoom", { data: nickname });
-
     UserRoom.create({
       roomId,
       userId
+    }).then(() => {
+      socket.join(roomId);
+      socket.in(roomId).emit("ClientEntryRoom", { nickname });
     });
   });
 
@@ -35,6 +35,9 @@ const socketController = socket => {
     socket.in(chat.roomId).emit("messageTclient", { chat });
     socket.emit("messageTclient", { chat });
   });
+
+  // 투표 생성
+  socket.on("createPole", () => {});
 };
 
 export default socketController;
