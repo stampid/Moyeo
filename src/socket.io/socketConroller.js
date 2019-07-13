@@ -1,16 +1,26 @@
-// import { messages } from "../../models/index";
+import { UserRoom } from "../../models/index";
 
 function pad2(n) {
   return n < 10 ? "0" + n : n;
 }
 
 const socketController = socket => {
-  console.log("클라이언트 접속");
+  console.log("hi");
 
-  socket.join(1);
-  //   console.log(socket.adapter.rooms);
-  //   socket.emit("start");
+  // 방 입장
+  socket.on("ServerEntryRoom", ({ data }) => {
+    const { roomId, userId, nickname } = data;
 
+    socket.join(data.roomId);
+    socket.in(data.roomId).emit("ClientEntryRoom", { data: nickname });
+
+    UserRoom.create({
+      roomId,
+      userId
+    });
+  });
+
+  // 메시지 보내기
   socket.on("messageFclient", ({ chat }) => {
     let date = new Date();
     date =
@@ -25,10 +35,6 @@ const socketController = socket => {
     socket.in(chat.roomId).emit("messageTclient", { chat });
     socket.emit("messageTclient", { chat });
   });
-
-  //   socket.on("disconnect", function() {
-  //     console.log("클라이언트 접속 종료");
-  //   });
 };
 
 export default socketController;
