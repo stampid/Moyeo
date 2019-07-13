@@ -7,7 +7,7 @@ const LOGOUT = "/logout";
 // room
 const ROOMS = "/rooms";
 const CREATEROOM = "/create";
-const ENTRYROOM = "/entry";
+const LISTROOM = "/list";
 
 // schedule
 const SCHEDULES = "/schedules";
@@ -23,7 +23,7 @@ const routes = {
   logout: LOGOUT,
   rooms: ROOMS,
   createRoom: CREATEROOM,
-  entryRoom: ENTRYROOM,
+  entryRoom: LISTROOM,
   schedules: SCHEDULES
 };
 
