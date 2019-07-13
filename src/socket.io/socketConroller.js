@@ -1,23 +1,33 @@
-import { messages } from "../../models/index";
+// import { messages } from "../../models/index";
+
+function pad2(n) {
+  return n < 10 ? "0" + n : n;
+}
 
 const socketController = socket => {
   console.log("클라이언트 접속");
-  let storage = {};
 
-  socket.on("messageFclient", ({ message }) => {
-    // client 로 부터 message 수신
-    console.log("----->> ", message);
-    socket.emit("messageTclient", { messages: "돌아옴!" });
+  socket.join(1);
+  //   console.log(socket.adapter.rooms);
+  //   socket.emit("start");
+
+  socket.on("messageFclient", ({ chat }) => {
+    let date = new Date();
+    date =
+      date.getFullYear().toString() +
+      pad2(date.getMonth() + 1) +
+      pad2(date.getDate()) +
+      pad2(date.getHours()) +
+      pad2(date.getMinutes()) +
+      pad2(date.getSeconds());
+    chat.createdAt = date;
+
+    socket.in(chat.roomId).emit("messageTclient", { chat });
+    socket.emit("messageTclient", { chat });
   });
-  // socket.emit("messageTdb", "메세지");      // client 로 부터 수신한 message db로 송신
-  socket.emit("messageTclient", { messages }); // db로 응답 받은 data를 client로 송신
 
-  socket.on("disconnect", function() {
-    console.log("클라이언트 접속 종료");
-  });
-
-  //   setInterval(function() {
-  //     socket.emit("message", "메세지");
+  //   socket.on("disconnect", function() {
+  //     console.log("클라이언트 접속 종료");
   //   });
 };
 
