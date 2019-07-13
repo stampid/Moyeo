@@ -44,6 +44,7 @@ db.Sequelize = Sequelize;
 db.User = require("./users")(sequelize, Sequelize);
 db.Schedule = require("./schedules")(sequelize, Sequelize);
 db.Room = require("./rooms")(sequelize, Sequelize);
+db.message = require("./messages")(sequelize, Sequelize);
 
 db.Room.belongsToMany(db.User, { through: "UserRoom" });
 db.User.belongsToMany(db.Room, { through: "UserRoom" });
