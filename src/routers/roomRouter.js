@@ -1,7 +1,7 @@
 import express from "express";
 import routes from "../routes";
 import { verifyJWT } from "../middleware/JWThelper";
-import { createRoom, roomList } from "../controllers/roomController";
+import { createRoom, roomList, member } from "../controllers/roomController";
 
 const router = express.Router();
 
@@ -9,4 +9,5 @@ const router = express.Router();
 
 router.post(routes.createRoom, createRoom);
 router.get(routes.roomList, roomList);
+router.get(routes.member, member);
 export default router;
