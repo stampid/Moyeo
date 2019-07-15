@@ -47,6 +47,7 @@ db.Room = require("./rooms")(sequelize, Sequelize);
 db.UserRoom = require("./UserRoom")(sequelize, Sequelize);
 db.Pole = require("./poles")(sequelize, Sequelize);
 db.PoleUser = require("./pole_users")(sequelize, Sequelize);
+db.UserSchedule = require("./UserSchedules")(sequelize, Sequelize);
 
 db.Room.belongsToMany(db.User, { through: "UserRoom", as: "users" });
 db.User.belongsToMany(db.Room, { through: "UserRoom", as: "rooms" });
