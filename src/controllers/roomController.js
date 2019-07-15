@@ -73,3 +73,26 @@ export const roomList = (req, res) => {
       res.send();
     });
 };
+
+export const member = (req, res) => {
+  const { roomId } = req.query;
+  const result = { success: null, data: null };
+
+  Room.findAll({
+    where: { id: roomId },
+    include: [
+      {
+        model: User,
+        as: "users",
+        through: {
+          required: true
+        }
+      }
+    ]
+  }).then(data => {
+    result.success = true;
+    result.data = data[0].users;
+    res.status(200);
+    res.send(result);
+  });
+};
