@@ -1,5 +1,13 @@
 import sequelize from "sequelize";
-import { UserRoom, Pole, Room, User, PoleUser } from "../../models/index";
+import {
+  UserRoom,
+  Pole,
+  Room,
+  User,
+  PoleUser,
+  Schedule,
+  UserSchedule
+} from "../../models/index";
 
 function pad2(n) {
   return n < 10 ? "0" + n : n;
@@ -87,17 +95,17 @@ const socketController = socket => {
       })
       .then(data => {
         const { users } = data[0];
-        const rows = [];
+        const poleUserRows = [];
 
         for (let i = 0; i < users.length; i += 1) {
-          rows.push({
+          poleUserRows.push({
             poleId: sendPole.id,
             userId: users[i].id,
             attendence: -1
           });
         }
 
-        return PoleUser.bulkCreate(rows);
+        return PoleUser.bulkCreate(poleUserRows);
       })
       .then(_ => {
         socket.in(roomId).emit("successPole", { sendPole });
@@ -105,7 +113,7 @@ const socketController = socket => {
       });
   });
 
-  // 투표 찬성 반대 기능(테스트 확인 완료 월요일 출근 후에 다시 확인)
+  // 투표 찬성 반대 기능
   socket.on("attendencePole", ({ attendence }) => {
     const { att, roomId, userId, poleId } = attendence;
     const choice = att === true ? 1 : 0;
@@ -136,6 +144,73 @@ const socketController = socket => {
         result.disagree = disagreeCount;
         socket.in(roomId).emit("returnAttendence", { result });
         socket.emit("returnAttendence", { result });
+      });
+  });
+
+  // 투표 종료 기능
+  socket.on("expirePole", ({ expire }) => {
+    const { poleId, roomId } = expire;
+    const result = {
+      agree: null,
+      disagree: null,
+      userCount: 0
+    };
+
+    PoleUser.findAndCountAll({ where: { poleId } })
+      .then(userCount => {
+        result.userCount = userCount.count;
+        return PoleUser.findAndCountAll({
+          where: { [sequelize.Op.and]: { poleId, attendence: 1 } }
+        });
+      })
+      .then(agreeCount => {
+        result.agree = agreeCount;
+        return PoleUser.findAndCountAll({
+          where: { [sequelize.Op.and]: { poleId, attendence: 0 } }
+        });
+      })
+      .then(disagreeCount => {
+        result.disagree = disagreeCount;
+        if (result.agree.count > Math.floor(result.userCount / 2)) {
+          return Pole.findOne({
+            where: {
+              id: poleId
+            }
+          });
+        }
+        throw new Error();
+      })
+      .then(poleData => {
+        const { poleTitle, promiseTime, locationX, locationY } = poleData;
+        return Schedule.create({
+          schdduleTitle: poleTitle,
+          promiseTime,
+          locationX,
+          locationY
+        });
+      })
+      .then(scheduleData => {
+        const {
+          agree: { rows }
+        } = result;
+        const userScheduleRows = [];
+        const { id } = scheduleData;
+
+        for (let i = 0; i < rows.length; i += 1) {
+          userScheduleRows.push({
+            userId: rows[i].userId,
+            scheduleId: id
+          });
+        }
+        return UserSchedule.bulkCreate(userScheduleRows);
+      })
+      .then(_ => {
+        socket.in(roomId).emit("resultPole", { result: true });
+        socket.emit("resultPole", { result: true });
+      })
+      .catch(_ => {
+        socket.in(roomId).emit("resultPole", { result: false });
+        socket.emit("resultPole", { result: false });
       });
   });
 
