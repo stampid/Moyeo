@@ -1,6 +1,7 @@
-import { users } from "../../models/index";
+import { User, Room, UserRoom } from "../../models/index";
 import hash from "../middleware/crypto";
 import { createJWT } from "../middleware/JWThelper";
+import sequelize from "sequelize";
 
 // 회원가입 함수
 export const signup = (req, res) => {
@@ -11,15 +12,14 @@ export const signup = (req, res) => {
   let { password } = req.body;
   password = hash(password);
 
-  users
-    .create({
-      email,
-      password,
-      nickname,
-      region,
-      age,
-      gender
-    })
+  User.create({
+    email,
+    password,
+    nickname,
+    region,
+    age,
+    gender
+  })
     .then(data => {
       result.success = true;
       res.status(200);
@@ -44,11 +44,10 @@ export const login = (req, res) => {
   let { password } = req.body;
 
   password = hash(password);
-  users
-    .findOne({
-      where: { email, password },
-      attributes: ["id", "email", "nickname", "region", "age", "gender"]
-    })
+  User.findOne({
+    where: { email, password },
+    attributes: ["id", "email", "nickname", "region", "age", "gender"]
+  })
     .then(async data => {
       const token = createJWT(data.email);
       if (token) {
@@ -69,7 +68,6 @@ export const login = (req, res) => {
       res.status(404);
       res.send(result);
     });
-  //   res.send("hello");
 };
 
 // 로그아웃 함수
@@ -79,4 +77,28 @@ export const logout = (req, res) => {
   };
   res.status(200);
   res.send(result);
+};
+
+// 유저 룸 리스트 필터 함수
+export const userRooms = (req, res) => {
+  const { userId } = req.query;
+  const result = { success: null, data: null };
+
+  User.findAll({
+    where: { id: userId },
+    include: [
+      {
+        model: Room,
+        as: "rooms",
+        through: {
+          required: true
+        }
+      }
+    ]
+  }).then(data => {
+    result.success = true;
+    result.data = data[0].rooms;
+    res.status(200);
+    res.send(result);
+  });
 };

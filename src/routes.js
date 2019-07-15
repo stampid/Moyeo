@@ -3,6 +3,7 @@ const USERS = "/users";
 const SIGNUP = "/signup";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
+const USERROOMS = "/list";
 
 // room
 const ROOMS = "/rooms";
@@ -21,6 +22,7 @@ const routes = {
   signup: SIGNUP,
   login: LOGIN,
   logout: LOGOUT,
+  userRooms: USERROOMS,
   rooms: ROOMS,
   createRoom: CREATEROOM,
   roomList: ROOMLIST,
