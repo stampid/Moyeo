@@ -31,7 +31,7 @@ app.use(routes.rooms, roomRouter);
 // app.use(routes.schedules);
 
 const server = app.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`);
+  console.log(`Server On : ${PORT}`);
 });
 
 // app.get('/', function(req, res) {
@@ -42,4 +42,4 @@ const io = socketIO.listen(server);
 
 io.on("connection", socket => socketController(socket));
 
-// sequelize.sync();
+sequelize.sync();
