@@ -52,7 +52,10 @@ db.UserSchedule = require("./UserSchedules")(sequelize, Sequelize);
 db.Room.belongsToMany(db.User, { through: "UserRoom", as: "users" });
 db.User.belongsToMany(db.Room, { through: "UserRoom", as: "rooms" });
 
-db.Schedule.belongsToMany(db.User, { through: "UserSchedule" });
-db.User.belongsToMany(db.Schedule, { through: "UserSchedule" });
+db.Schedule.belongsToMany(db.User, { through: "UserSchedule", as: "users" });
+db.User.belongsToMany(db.Schedule, {
+  through: "UserSchedule",
+  as: "schedules"
+});
 
 module.exports = db;

@@ -4,7 +4,8 @@ import {
   signup,
   login,
   logout,
-  userRooms
+  userRooms,
+  schedules
 } from "../controllers/userController";
 import { verifyJWT } from "../middleware/JWThelper";
 
@@ -17,5 +18,7 @@ router.post(routes.signup, signup); // 회원가입
 router.post(routes.logout, logout); // 로그아웃
 
 router.get(routes.userRooms, userRooms); // 내 방 리스트
+
+router.get(routes.schedules, schedules); // 내 스케줄 리스트
 
 export default router;

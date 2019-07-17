@@ -4,6 +4,7 @@ const SIGNUP = "/signup";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
 const USERROOMS = "/list";
+const SCHEDULES = "/schedules";
 
 // room
 const ROOMS = "/rooms";
@@ -12,7 +13,7 @@ const ROOMLIST = "/list";
 const MEMBER = "/member";
 
 // schedule
-const SCHEDULES = "/schedules";
+// const SCHEDULES = "/schedules";    // 이름 주의!
 
 // kakao
 
@@ -24,11 +25,11 @@ const routes = {
   login: LOGIN,
   logout: LOGOUT,
   userRooms: USERROOMS,
+  schedules: SCHEDULES,
   rooms: ROOMS,
   createRoom: CREATEROOM,
   roomList: ROOMLIST,
-  member: MEMBER,
-  schedules: SCHEDULES
+  member: MEMBER
 };
 
 export default routes;
