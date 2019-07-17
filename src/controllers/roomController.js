@@ -43,12 +43,9 @@ export const createRoom = (req, res) => {
 };
 
 export const roomList = (req, res) => {
-  const { roomId } = req.query;
-  let { limit, region, category, roomTitle } = req.query;
-  region = region.slice(1, region.length - 1);
-  category = category.slice(1, category.length - 1);
-  roomTitle =
-    roomTitle === undefined ? "" : roomTitle.slice(1, roomTitle.length - 1);
+  const { roomId, region, category } = req.query;
+  let { limit, roomTitle } = req.query;
+  roomTitle = roomTitle === undefined ? "" : roomTitle;
 
   const where = {
     id: { [sequelize.Op.lt]: roomId },
