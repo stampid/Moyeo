@@ -43,9 +43,14 @@ export const createRoom = (req, res) => {
 };
 
 export const roomList = (req, res) => {
-  const { roomId, region, category, search } = req.query;
+  const { roomId } = req.query;
+  let { limit, region, category, roomTitle } = req.query;
+  region = region.slice(1, region.length - 1);
+  category = category.slice(1, category.length - 1);
+  roomTitle = roomTitle.slice(1, roomTitle.length - 1);
+
   let where;
-  if (search === undefined) {
+  if (roomTitle === undefined) {
     // 검색어 없을 경우 검색 조건
     where = {
       id: { [sequelize.Op.lt]: roomId },
@@ -61,24 +66,17 @@ export const roomList = (req, res) => {
       [sequelize.Op.and]: {
         region,
         category,
-        roomTitle: { [sequelize.Op.like]: `%${search}%` }
+        roomTitle: { [sequelize.Op.like]: `%${roomTitle}%` }
       }
     };
   }
   const result = { success: null, data: null };
-  let { limit } = req.query;
 
   limit = Number(limit);
 
   if (roomId === undefined) {
     delete where.id;
   }
-
-  // if (search === undefined) {
-  //   delete where["[sequelize.Op.and]"].roomTitle;
-  // } else if (search.length < 1) {
-  //   delete where["[sequelize.Op.and]"].roomTitle;
-  // }
 
   Room.findAll({
     order: [["id", "DESC"]],

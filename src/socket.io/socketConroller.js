@@ -15,7 +15,7 @@ function pad2(n) {
 
 const socketController = socket => {
   console.log("hi");
-
+  socket.emit("test", "hi");
   // 방 입장
   socket.on("ServerEntryRoom", ({ data }) => {
     const { roomId, userId, nickname } = data;
