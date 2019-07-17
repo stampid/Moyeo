@@ -60,7 +60,7 @@ export const roomList = (req, res) => {
 
   limit = Number(limit);
 
-  if (roomId === undefined) {
+  if (roomId === "undefined") {
     delete where.id;
   }
 
