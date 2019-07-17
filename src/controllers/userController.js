@@ -1,4 +1,4 @@
-import { User, Room, UserRoom } from "../../models/index";
+import { User, Room, UserRoom, Schedule } from "../../models/index";
 import hash from "../middleware/crypto";
 import { createJWT } from "../middleware/JWThelper";
 import sequelize from "sequelize";
@@ -98,6 +98,31 @@ export const userRooms = (req, res) => {
   }).then(data => {
     result.success = true;
     result.data = data[0].rooms;
+    res.status(200);
+    res.send(result);
+  });
+};
+
+// 유저 My Schedule 리스트 필터 함수
+export const schedules = (req, res) => {
+  const { userId } = req.query;
+  const result = { success: null, data: null };
+
+  User.findAll({
+    where: { id: userId },
+    include: [
+      {
+        model: Schedule,
+        as: "schedules",
+        through: {
+          required: true
+        }
+      }
+    ]
+  }).then(data => {
+    console.log(data);
+    result.success = true;
+    result.data = data[0].schedules;
     res.status(200);
     res.send(result);
   });
