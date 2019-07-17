@@ -8,6 +8,6 @@ const router = express.Router();
 // router.use("/", verifyJWT);
 
 router.post(routes.createRoom, createRoom);
-router.get(routes.roomList, roomList);
+router.get("/", roomList);
 router.get(routes.member, member);
 export default router;

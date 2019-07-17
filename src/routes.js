@@ -8,7 +8,6 @@ const USERROOMS = "/list";
 // room
 const ROOMS = "/rooms";
 const CREATEROOM = "/create";
-const ROOMLIST = "/list";
 const MEMBER = "/member";
 
 // schedule
@@ -26,7 +25,6 @@ const routes = {
   userRooms: USERROOMS,
   rooms: ROOMS,
   createRoom: CREATEROOM,
-  roomList: ROOMLIST,
   member: MEMBER,
   schedules: SCHEDULES
 };
