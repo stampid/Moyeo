@@ -47,29 +47,18 @@ export const roomList = (req, res) => {
   let { limit, region, category, roomTitle } = req.query;
   region = region.slice(1, region.length - 1);
   category = category.slice(1, category.length - 1);
-  roomTitle = roomTitle.slice(1, roomTitle.length - 1);
+  roomTitle =
+    roomTitle === undefined ? "" : roomTitle.slice(1, roomTitle.length - 1);
 
-  let where;
-  if (roomTitle === undefined) {
-    // 검색어 없을 경우 검색 조건
-    where = {
-      id: { [sequelize.Op.lt]: roomId },
-      [sequelize.Op.and]: {
-        region,
-        category
-      }
-    };
-  } else {
-    // 검색어 있을 경우 검색 조건
-    where = {
-      id: { [sequelize.Op.lt]: roomId },
-      [sequelize.Op.and]: {
-        region,
-        category,
-        roomTitle: { [sequelize.Op.like]: `%${roomTitle}%` }
-      }
-    };
-  }
+  const where = {
+    id: { [sequelize.Op.lt]: roomId },
+    [sequelize.Op.and]: {
+      region,
+      category,
+      roomTitle: { [sequelize.Op.like]: `%${roomTitle}%` }
+    }
+  };
+
   const result = { success: null, data: null };
 
   limit = Number(limit);
