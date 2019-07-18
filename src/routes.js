@@ -3,7 +3,7 @@ const USERS = "/users";
 const SIGNUP = "/signup";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
-const USERROOMS = "/list";
+const USERROOMS = "/rooms";
 const SCHEDULES = "/schedules";
 
 // room
