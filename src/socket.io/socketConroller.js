@@ -63,6 +63,9 @@ const socketController = socket => {
 
   // 메시지 보내기
   socket.on("messageFclient", ({ chat }) => {
+    console.log("메시지 이벤트");
+    console.log(chat);
+
     let date = new Date();
     date =
       date.getFullYear().toString() +
