@@ -46,7 +46,7 @@ const socketController = socket => {
       userId
     }).then(() => {
       socket.join(roomId);
-      socket.in(roomId).emit("ClientEntryRoom", { nickname });
+      socket.broadcast.to(roomId).emit("ClientEntryRoom", { nickname });
     });
   });
 
@@ -62,7 +62,7 @@ const socketController = socket => {
       pad2(date.getSeconds());
     chat.createdAt = date;
 
-    socket.in(chat.roomId).emit("messageTclient", { chat });
+    socket.broadcast.to(chat.roomId).emit("messageTclient", { chat });
     socket.emit("messageTclient", { chat });
   });
 
@@ -129,7 +129,7 @@ const socketController = socket => {
         return PoleUser.bulkCreate(poleUserRows);
       })
       .then(_ => {
-        socket.in(roomId).emit("successPole", { sendPole });
+        socket.broadcast.to(roomId).emit("successPole", { sendPole });
         socket.emit("successPole", { sendPole });
       });
   });
@@ -163,7 +163,7 @@ const socketController = socket => {
       })
       .then(disagreeCount => {
         result.disagree = disagreeCount;
-        socket.in(roomId).emit("returnAttendence", { result });
+        socket.broadcast.to(roomId).emit("returnAttendence", { result });
         socket.emit("returnAttendence", { result });
       });
   });
@@ -226,11 +226,11 @@ const socketController = socket => {
         return UserSchedule.bulkCreate(userScheduleRows);
       })
       .then(_ => {
-        socket.in(roomId).emit("resultPole", { result: true });
+        socket.broadcast.to(roomId).emit("resultPole", { result: true });
         socket.emit("resultPole", { result: true });
       })
       .catch(_ => {
-        socket.in(roomId).emit("resultPole", { result: false });
+        socket.broadcast.to(roomId).emit("resultPole", { result: false });
         socket.emit("resultPole", { result: false });
       });
   });
