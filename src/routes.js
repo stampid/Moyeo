@@ -8,7 +8,6 @@ const SCHEDULES = "/schedules";
 
 // room
 const ROOMS = "/rooms";
-const CREATEROOM = "/create";
 const MEMBER = "/member";
 
 // schedule
@@ -26,7 +25,6 @@ const routes = {
   userRooms: USERROOMS,
   schedules: SCHEDULES,
   rooms: ROOMS,
-  createRoom: CREATEROOM,
   member: MEMBER
 };
 

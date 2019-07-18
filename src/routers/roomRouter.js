@@ -7,7 +7,7 @@ const router = express.Router();
 
 // router.use("/", verifyJWT);
 
-router.post(routes.createRoom, createRoom);
+router.post("/", createRoom);
 router.get("/", roomList);
 router.get(routes.member, member);
 export default router;
