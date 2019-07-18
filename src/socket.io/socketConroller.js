@@ -41,13 +41,20 @@ const socketController = socket => {
   socket.on("ServerEntryRoom", ({ data }) => {
     const { roomId, userId, nickname } = data;
 
-    UserRoom.create({
-      roomId,
-      userId
+    UserRoom.findOrCreate({
+      where: { [sequelize.Op.and]: { roomId, userId } },
+      defaults: {
+        roomId,
+        userId
+      }
     })
-      .then(() => {
-        socket.join(roomId);
-        socket.broadcast.to(roomId).emit("ClientEntryRoom", { nickname });
+      .spread((_, created) => {
+        console.log(created);
+        if (created) {
+          console.log("hello");
+          socket.join(roomId);
+          socket.broadcast.to(roomId).emit("ClientEntryRoom", { nickname });
+        }
       })
       .catch(err => {
         socket.emit("ClientEntryRoom", { err });
