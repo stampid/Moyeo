@@ -1,4 +1,6 @@
+import jwt from "jsonwebtoken";
 import sequelize from "sequelize";
+import dotenv from "dotenv";
 import {
   UserRoom,
   Pole,
@@ -9,13 +11,32 @@ import {
   UserSchedule
 } from "../../models/index";
 
+dotenv.config();
+
 function pad2(n) {
   return n < 10 ? "0" + n : n;
 }
 
 const socketController = socket => {
   console.log("hi");
-  socket.emit("test", "hi");
+
+  // 토큰 검증
+  socket.use((_, next) => {
+    const token =
+      socket.handshake.query.Token === undefined
+        ? "something"
+        : socket.handshake.query.Token;
+    const { JWTSECRET } = process.env;
+
+    jwt.verify(token, JWTSECRET, (err, _) => {
+      if (err) {
+        socket.emit("tokenExpire", { isLogin: false });
+      } else {
+        next();
+      }
+    });
+  });
+
   // 방 입장
   socket.on("ServerEntryRoom", ({ data }) => {
     const { roomId, userId, nickname } = data;
