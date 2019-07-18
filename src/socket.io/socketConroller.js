@@ -54,6 +54,13 @@ const socketController = socket => {
       });
   });
 
+  socket.on("ServerCreateRoom", ({ data }) => {
+    const { roomId, userId, nickname } = data;
+
+    socket.join(roomId);
+    socket.broadcast.to(roomId).emit("ClientEntryRoom", { nickname });
+  });
+
   // 메시지 보내기
   socket.on("messageFclient", ({ chat }) => {
     let date = new Date();
