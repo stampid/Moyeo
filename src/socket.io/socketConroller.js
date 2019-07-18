@@ -44,10 +44,14 @@ const socketController = socket => {
     UserRoom.create({
       roomId,
       userId
-    }).then(() => {
-      socket.join(roomId);
-      socket.broadcast.to(roomId).emit("ClientEntryRoom", { nickname });
-    });
+    })
+      .then(() => {
+        socket.join(roomId);
+        socket.broadcast.to(roomId).emit("ClientEntryRoom", { nickname });
+      })
+      .catch(err => {
+        socket.emit("ClientEntryRoom", { err });
+      });
   });
 
   // 메시지 보내기
@@ -131,6 +135,9 @@ const socketController = socket => {
       .then(_ => {
         socket.broadcast.to(roomId).emit("successPole", { sendPole });
         socket.emit("successPole", { sendPole });
+      })
+      .cath(err => {
+        socket.emit("successPole", { err });
       });
   });
 
@@ -165,6 +172,9 @@ const socketController = socket => {
         result.disagree = disagreeCount;
         socket.broadcast.to(roomId).emit("returnAttendence", { result });
         socket.emit("returnAttendence", { result });
+      })
+      .catch(err => {
+        socket.emit("returnAttendence", { err });
       });
   });
 
