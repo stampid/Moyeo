@@ -3,12 +3,11 @@ const USERS = "/users";
 const SIGNUP = "/signup";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
-const USERROOMS = "/list";
+const USERROOMS = "/rooms";
 const SCHEDULES = "/schedules";
 
 // room
 const ROOMS = "/rooms";
-const CREATEROOM = "/create";
 const MEMBER = "/member";
 
 // schedule
@@ -26,7 +25,6 @@ const routes = {
   userRooms: USERROOMS,
   schedules: SCHEDULES,
   rooms: ROOMS,
-  createRoom: CREATEROOM,
   member: MEMBER
 };
 
