@@ -89,6 +89,7 @@ const socketController = socket => {
 
   // 투표 생성
   socket.on("createPole", async ({ pole }) => {
+    console.log("===투표 생성 이벤트===");
     let sendPole = null;
     const {
       poleTitle,
@@ -150,16 +151,22 @@ const socketController = socket => {
         return PoleUser.bulkCreate(poleUserRows);
       })
       .then(_ => {
+        console.log("===투표 생성 성공! 클라이언트들에게 뿌립니다===");
         socket.broadcast.to(roomId).emit("successPole", { sendPole });
         socket.emit("successPole", { sendPole });
       })
       .cath(err => {
+        console.log(
+          "===투표 생성 실패! 이벤트를 보낸 클라이언트에게만 보냅니다!==="
+        );
+        console.log(err);
         socket.emit("successPole", { err });
       });
   });
 
   // 투표 찬성 반대 기능
   socket.on("attendencePole", ({ attendence }) => {
+    console.log("===투표 찬성/반대 누르기 이벤트!===");
     const { att, roomId, userId, poleId } = attendence;
     const choice = att === true ? 1 : 0;
     const result = {
@@ -186,17 +193,24 @@ const socketController = socket => {
         });
       })
       .then(disagreeCount => {
+        console.log(
+          "===투표 찬성/반대 누르기 성공! 클라이언트들에게 결과를 뿌려줍니다!==="
+        );
+        console.log("result : ", result);
         result.disagree = disagreeCount;
         socket.broadcast.to(roomId).emit("returnAttendence", { result });
         socket.emit("returnAttendence", { result });
       })
       .catch(err => {
+        console.log("===투표 찬성/반대 누르기 실패!===");
+        console.log(err);
         socket.emit("returnAttendence", { err });
       });
   });
 
   // 투표 종료 기능
   socket.on("expirePole", ({ expire }) => {
+    console.log("===투표 종료 이벤트===");
     const { poleId, roomId } = expire;
     const result = {
       agree: null,
@@ -253,10 +267,13 @@ const socketController = socket => {
         return UserSchedule.bulkCreate(userScheduleRows);
       })
       .then(_ => {
+        console.log("===투표 등록 성공! 클라이언트들에게 뿌려줍니다!===");
         socket.broadcast.to(roomId).emit("resultPole", { result: true });
         socket.emit("resultPole", { result: true });
       })
       .catch(_ => {
+        console.log("===투표 등록 실패! 혹은 에러!===");
+        console.log(_);
         socket.broadcast.to(roomId).emit("resultPole", { result: false });
         socket.emit("resultPole", { result: false });
       });
