@@ -95,12 +95,19 @@ export const userRooms = (req, res) => {
         }
       }
     ]
-  }).then(data => {
-    result.success = true;
-    result.data = data[0].rooms;
-    res.status(200);
-    res.send(result);
-  });
+  })
+    .then(data => {
+      result.success = true;
+      result.data = data[0].rooms;
+      res.status(200);
+      res.send(result);
+    })
+    .catch(err => {
+      result.success = false;
+      result.err = err;
+      res.status(404);
+      res.send(result);
+    });
 };
 
 // 유저 My Schedule 리스트 필터 함수
@@ -119,11 +126,19 @@ export const schedules = (req, res) => {
         }
       }
     ]
-  }).then(data => {
-    console.log(data);
-    result.success = true;
-    result.data = data[0].schedules;
-    res.status(200);
-    res.send(result);
-  });
+  })
+    .then(data => {
+      console.log(data);
+      result.success = true;
+      result.data = data[0].schedules;
+      res.status(200);
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+      result.success = false;
+      result.err = err;
+      res.status(404);
+      res.send(result);
+    });
 };

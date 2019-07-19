@@ -37,6 +37,7 @@ export const createRoom = (req, res) => {
     })
     .catch(err => {
       result.success = false;
+      result.err = err;
       res.status(4040);
       res.send(result);
     });
@@ -76,8 +77,10 @@ export const roomList = (req, res) => {
       res.send(result);
     })
     .catch(err => {
+      result.success = false;
+      result.err = err;
       res.status(404);
-      res.send(err);
+      res.send(result);
     });
 };
 
@@ -96,10 +99,17 @@ export const member = (req, res) => {
         }
       }
     ]
-  }).then(data => {
-    result.success = true;
-    result.data = data[0].users;
-    res.status(200);
-    res.send(result);
-  });
+  })
+    .then(data => {
+      result.success = true;
+      result.data = data[0].users;
+      res.status(200);
+      res.send(result);
+    })
+    .catch(err => {
+      result.success = false;
+      result.err = err;
+      res.status(404);
+      res.send(result);
+    });
 };
