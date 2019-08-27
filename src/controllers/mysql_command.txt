@@ -1,0 +1,15 @@
+// insert user into room
+INSERT INTO user_rooms(room_id, user_id, created_at, updated_at, deleted_at) VALUES (3,2, '2019-07-15 20:00:00', '2019-07-15 20:00:00', NULL);
+
+// make pole on a room
+INSERT INTO poles(pole_title, room_id, pole_content, expire_time, promise_time, location_x, location_y, pole_complete) VALUES ('pole No.6', 6, 'hoo ya!', '2019-07-15 20:00:00', '2019-07-15 20:00:00', 11, 11, 1);
+
+// pole_users
+INSERT INTO pole_users(pole_id, user_id, attendence) VALUES (1, 1, 1);
+
+// schedule insert
+INSERT INTO schedules(schddule_title, promise_time, location_x, location_y) VALUES ('sche No.1', '2019-07-15 20:00:00', 1, 1);
+
+// user sche join
+INSERT INTO UserSchedule(user_id, schedule_id, created_at, updated_at) VALUES (1, 2, '2019-07-15 20:00:00', '2019-07-15 20:00:00');
+INSERT INTO user_schedules(user_id, schedule_id, created_at, updated_at) VALUES (1, 1, '2019-07-15 20:00:00', '2019-07-15 20:00:00');
